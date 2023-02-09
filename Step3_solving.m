@@ -96,6 +96,12 @@ for m = 0:M
         dlmwrite(result_filename, result, '-append');
         
         disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);
+        fig = scatter(bitflip_iter,bitflip_pos);
+%         ylim();
+        xlim([0, noerror_converge]);
+        xlabel('Iteration Number');
+        ylabel('Error Location');
+        saveas(fig,['./figures/error_location', matrixname, 'experiment', num2str(m)], 'png');
         if flag == 1
             disp('did not converged');
         end
