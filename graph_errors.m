@@ -5,4 +5,4 @@ function graph_errors(iteration, error, matrixname)
     fig = scatter(iteration,error);
     xlabel('Iteration Number');
     ylabel('Error Location');
-    saveas(fig,['./figures/error_location', matrixname, 'experiment', num2str(m)], 'png');
+    saveas(fig,['./figures/error_location', matrixname], 'png');

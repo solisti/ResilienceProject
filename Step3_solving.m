@@ -84,8 +84,8 @@ for m = 0:M
         [~,flag,iter,diff_v] = pcg3(A, b, tol, error_max_iter, L, L', inject_error, bitflip_pos, bitflip_iter);
         converge = iter;   % number of iterations in error-injecting run
         
-%         result = [N,flag,bitflip_iter',bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge];
-        result = vertcat(N,flag,bitflip_iter',bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge);
+        result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge];
+%         result = vertcat(N,flag,bitflip_iter',bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge);
         dlmwrite(result_filename, result, '-append');
         
         disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);
