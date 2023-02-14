@@ -12,17 +12,20 @@ matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 bitflip_iter = 1;
 
+new_error = ['./matrices/', matrices{1}, '_newerror.mat'];
+load(new_error, 'indices', 'E');
+graph_errors(indices, E, matrices{1});
+
 %get number of iterations needed to converge w/o error
 for m = 1:num_matrices
     matrixname = matrices{m};
-    test(matrixname, bitflip_iter);
+    noerror_run(matrixname, bitflip_iter);
 end
 
 for m = 1:num_matrices
     matrixname = matrices{m}; 
     Step3_solving(matrixname, bitflip_iter);
 end 
-
 
 
 end

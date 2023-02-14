@@ -1,4 +1,4 @@
-function test(matrixname, bitflip_iter)
+function noerror_run(matrixname, bitflip_iter)
 
 % This function injects error to a specific matrix at a particular iteration. 
 % matrixnname: name of the matrix 
@@ -42,7 +42,6 @@ if exist(error_filename, 'file') < 1 % file does not exist
         M = N;
     else
         E = datasample([1:N], M);  % error in M random locations from 1 to N
-        newerror = datasample([1:N], M);
     end
     save(error_filename, 'E');
 else % file already exists, then just load the file 

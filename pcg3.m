@@ -20,8 +20,8 @@ while (iter < maxit) && (relres > tol)
     %inject error in vector p
     if (ismember(iter, bitflip_iter) && inject_error == 1)
         diff_v = max(p); 
-        error_loc = bitflip_pos(cnt);
-        p(error_loc) = p(error_loc) + diff_v;
+%         error_loc = bitflip_pos(cnt);
+        p(bitflip_pos) = p(bitflip_pos) + diff_v;
         cnt = cnt + 1;
     end
     

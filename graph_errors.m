@@ -1,8 +1,8 @@
-function plot_error_locations(matrix, errors)
-    [m, n] = size(matrix);
-    imagesc(abs(errors) > 0);
-    colormap(gray);
-    axis equal;
-    axis tight;
-    set(gca, 'XTick', 1:n, 'YTick', 1:m);
-end
+function graph_errors(iteration, error, matrixname)
+    m = length(error);
+    n = length(iteration);
+    
+    fig = scatter(iteration,error);
+    xlabel('Iteration Number');
+    ylabel('Error Location');
+    saveas(fig,['./figures/error_location', matrixname, 'experiment', num2str(m)], 'png');
