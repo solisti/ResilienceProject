@@ -23,10 +23,12 @@ end
 for m = 1:num_matrices
     matrixname = matrices{m}; 
     Step3_solving(matrixname, bitflip_iter);
+end 
+
+for m = 1:num_matrices
     new_error = ['./matrices/', matrices{m}, '_newerror.mat'];
     load(new_error, 'indices', 'E');
     graph_errors(indices, E, matrices{m});
 end 
-
 
 end
