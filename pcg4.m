@@ -32,7 +32,7 @@ while (iter < maxit) && (relres > tol)
     % look at properties of vector x
     if (iter == bitflip_iter - 1) && (inject_error == 1)
         first_temp_gradient = abs(x(bitflip_pos)- x1(bitflip_pos));
-        second_temp_gradient = abs(x(bitflip_pos)- 2*x1(bitflip_pos) + x2(bitflip_pos));
+%         second_temp_gradient = abs(x(bitflip_pos)- 2*x1(bitflip_pos) + x2(bitflip_pos));
     end
     
     r = r - alpha * q;
