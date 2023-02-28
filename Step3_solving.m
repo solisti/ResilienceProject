@@ -14,6 +14,8 @@ disp('Done loading matrix');
 drawnow('update');
 [N, ~] = size(A);
 result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+rel_grad_filename = ['./matrices/', matrixname, '_relative_gradient.mat'];
+abs_grad_filename = ['./matrices/', matrixname, '_absolute_gradient.mat'];
 
 % load preconditioner of matrix
 precond_filename = ['./matrices/', matrixname, '_precond.mat'];
@@ -36,6 +38,9 @@ max_iter = 10000;
 % the % of error we want in the matrix
 fraction = .01;
 
+grad_rel = "";
+grad_abs = "";
+
 % create new error file to select which iterations to inject error
 new_error = ['./matrices/', matrixname, '_newerror.mat'];
 % load iterations file
@@ -47,6 +52,7 @@ if exist(new_error, 'file') < 1 % file does not exist
     else
         load(iter_filename, 'noerror_converge');
 %         num_elements = ceil(noerror_converge * fraction);
+        error_max_iter = noerror_converge*100;
         
         indices = datasample([1:noerror_converge], M, 'Replace',false); % find the interations we want to inject error in
         E = datasample([1:N], M, 'Replace',false); % error in M random locations from 1 to N
@@ -63,43 +69,48 @@ end
 for m = 0:M
 %     Since we're making a separate error-free run, this is technically no longer needed
     if m == 0
-        % Experiment 0: make an error-free run
-        inject_error = 0;
-        [~,flag,iter,~] = pcg3(A, b, tol, max_iter, L, L', inject_error, 0, 0);
-        
-        if flag == 1
-           disp('error-free execution does not converge');
-           return;
-        end
-        noerror_converge = iter;   % number of iterations in error-free run
-        error_max_iter = noerror_converge*100;   % set max number of iterations to run when injecting errors (100x)
-        disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(noerror_converge)]);
-%         save(iter_filename, 'noerror_converge');
+%         % Experiment 0: make an error-free run
+%         inject_error = 0;
+%         [~,flag,iter,~] = pcg3(A, b, tol, max_iter, L, L', inject_error, 0, 0);
+%         
+%         if flag == 1
+%            disp('error-free execution does not converge');
+%            return;
+%         end
+%         noerror_converge = iter;   % number of iterations in error-free run
+%         error_max_iter = noerror_converge*100;   % set max number of iterations to run when injecting errors (100x)
+%         disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(noerror_converge)]);
     else
         % Inject errors from Experiment 1 to M, each at a random location 
         inject_error = 1;
         bitflip_pos = E(:, m);
         bitflip_iter = indices(:,m);
         
-        [~,flag,iter,diff_v] = pcg3(A, b, tol, error_max_iter, L, L', inject_error, bitflip_pos, bitflip_iter);
+        load(iter_filename, 'noerror_converge');
+        error_max_iter = noerror_converge*100;
+        
+%         [~,flag,iter,diff_v] = pcg3(A, b, tol, error_max_iter, L, L', inject_error, bitflip_pos, bitflip_iter);
+        [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
         converge = iter;   % number of iterations in error-injecting run
         
+        grad_rel = [grad_rel, first_rel_gradient];
+        grad_abs = [grad_abs, first_temp_gradient];
         result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge];
-%         result = vertcat(N,flag,bitflip_iter',bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge);
         dlmwrite(result_filename, result, '-append');
         
         disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);
-%         fig = scatter(bitflip_iter,bitflip_pos);
-% %         ylim();
-%         xlim([0, noerror_converge]);
-%         xlabel('Iteration Number');
-%         ylabel('Error Location');
-%         saveas(fig,['./figures/error_location', matrixname, 'experiment', num2str(m)], 'png');
         if flag == 1
             disp('did not converged');
         end
         
     end
+
+
 end
+
+sorted_rel = sort(grad_rel, 'descend');
+sorted_abs = sort(grad_abs, 'descend');
+save(abs_grad_filename, "grad_abs", "sorted_abs");
+save(rel_grad_filename, "grad_rel", "sorted_rel");
 
 end

@@ -29,6 +29,7 @@ for m = 1:num_matrices
     new_error = ['./matrices/', matrices{m}, '_newerror.mat'];
     load(new_error, 'indices', 'E');
     graph_errors(indices, E, matrices{m});
+%     sort_gradient(matrices{m});
 end 
 
 end
