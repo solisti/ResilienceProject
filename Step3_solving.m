@@ -38,8 +38,8 @@ max_iter = 10000;
 % the % of error we want in the matrix
 fraction = .01;
 
-grad_rel = "";
-grad_abs = "";
+grad_rel = zeros(N, 100);
+grad_abs = zeros(N, 100);
 
 % create new error file to select which iterations to inject error
 new_error = ['./matrices/', matrixname, '_newerror.mat'];
@@ -66,46 +66,30 @@ end
 
 
 %% start pcg 
-for m = 0:M
-%     Since we're making a separate error-free run, this is technically no longer needed
-    if m == 0
-%         % Experiment 0: make an error-free run
-%         inject_error = 0;
-%         [~,flag,iter,~] = pcg3(A, b, tol, max_iter, L, L', inject_error, 0, 0);
-%         
-%         if flag == 1
-%            disp('error-free execution does not converge');
-%            return;
-%         end
-%         noerror_converge = iter;   % number of iterations in error-free run
-%         error_max_iter = noerror_converge*100;   % set max number of iterations to run when injecting errors (100x)
-%         disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(noerror_converge)]);
-    else
-        % Inject errors from Experiment 1 to M, each at a random location 
-        inject_error = 1;
-        bitflip_pos = E(:, m);
-        bitflip_iter = indices(:,m);
-        
-        load(iter_filename, 'noerror_converge');
-        error_max_iter = noerror_converge*100;
-        
+for m = 1:M
+    % Inject errors from Experiment 1 to M, each at a random location 
+    inject_error = 1;
+    bitflip_pos = E(:, m);
+    bitflip_iter = indices(:,m);
+    
+    load(iter_filename, 'noerror_converge');
+    error_max_iter = noerror_converge*100;
+    
 %         [~,flag,iter,diff_v] = pcg3(A, b, tol, error_max_iter, L, L', inject_error, bitflip_pos, bitflip_iter);
-        [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
-        converge = iter;   % number of iterations in error-injecting run
-        
-        grad_rel = [grad_rel, first_rel_gradient];
-        grad_abs = [grad_abs, first_temp_gradient];
-        result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge];
-        dlmwrite(result_filename, result, '-append');
-        
-        disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);
-        if flag == 1
-            disp('did not converged');
-        end
-        
+    [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
+    converge = iter;   % number of iterations in error-injecting run
+
+    grad_abs(:, m) = first_temp_gradient;
+    grad_rel(:, m) = first_rel_gradient;
+
+    result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge];
+    dlmwrite(result_filename, result, '-append');
+    
+    disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);
+    if flag == 1
+        disp('did not converged');
     end
-
-
+        
 end
 
 sorted_rel = sort(grad_rel, 'descend');

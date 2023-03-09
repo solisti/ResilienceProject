@@ -27,14 +27,17 @@ while (iter < maxit) && (relres > tol)
     alpha = (r'*z)/(p'*q);
     x2 = x1;
     x1 = x;
-    x = x + alpha * p;         
+    x = x + alpha * p;   
+
     
     % look at properties of vector x
     if (iter == bitflip_iter - 1) && (inject_error == 1)
-        first_temp_gradient = abs(x(bitflip_pos)- x1(bitflip_pos));
+        first_temp_gradient = abs(x- x1);
 %         second_temp_gradient = abs(x(bitflip_pos)- 2*x1(bitflip_pos) + x2(bitflip_pos));
-        first_rel_gradient = abs(x(bitflip_pos)- x1(bitflip_pos)) / abs(x1(bitflip_pos));
+        first_rel_gradient = abs((x-x1)./ x1); %ask about division by zero 
     end
+
+
     
     r = r - alpha * q;
     z = M2\(M1\r);
