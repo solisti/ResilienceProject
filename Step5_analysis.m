@@ -31,6 +31,15 @@ for m = 1:num_matrices
     result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
     result = dlmread(result_filename);
 
+    rel_grad_filename = ['./matrices/', matrixname, '_gradient_relative.mat'];
+    abs_grad_filename = ['./matrices/', matrixname, '_gradient_absolute.mat'];
+    load(rel_grad_filename);
+    load(abs_grad_filename);
+%     get the index for sorted gradients, see line 27
+%     [~, sorted_g] = sort()
+    [~, sorted_rel] = sort(grad_rel, 'descend');
+    [~, sorted_abs] = sort(grad_abs, 'descend');
+
     error_positions = result(:, 4);
     noerror_converges = result(:, 7);
     converges = result(:, 8);
@@ -76,6 +85,47 @@ for m = 1:num_matrices
         end
     end
     dlmwrite(analysis_filename, slowdowns);
+
+    %% analyze data by gradient
+    protect_method = 'gradient'; 
+    analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
+    slowdowns = zeros(num_protects, num_exps);
+    for p = 1:num_protects
+        protect_percent = protects(p);
+        protect_number = ceil(protect_percent * N);
+        protect_positions = sorted_abs(1:protect_number); %replace rand_pos with whatever i have 
+        for e = 1:num_exps
+            error_position = error_positions(e);
+            converge_ratio = converge_ratios(e);
+            if ismember(error_position, protect_positions)
+                slowdowns(p, e) = 1;
+            else
+                slowdowns(p, e) = converge_ratio; 
+            end
+        end
+    end
+    dlmwrite(analysis_filename, slowdowns);
+
+    %% analyze data by relative gradient
+    protect_method = 'relgradient'; 
+    analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
+    slowdowns = zeros(num_protects, num_exps);
+    for p = 1:num_protects
+        protect_percent = protects(p);
+        protect_number = ceil(protect_percent * N);
+        protect_positions = sorted_rel(1:protect_number); %replace rand_pos with whatever i have 
+        for e = 1:num_exps
+            error_position = error_positions(e);
+            converge_ratio = converge_ratios(e);
+            if ismember(error_position, protect_positions)
+                slowdowns(p, e) = 1;
+            else
+                slowdowns(p, e) = converge_ratio; 
+            end
+        end
+    end
+    dlmwrite(analysis_filename, slowdowns);
+
 end 
     
 end

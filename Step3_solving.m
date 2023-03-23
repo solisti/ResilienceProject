@@ -14,8 +14,8 @@ disp('Done loading matrix');
 drawnow('update');
 [N, ~] = size(A);
 result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-rel_grad_filename = ['./matrices/', matrixname, '_relative_gradient.mat'];
-abs_grad_filename = ['./matrices/', matrixname, '_absolute_gradient.mat'];
+rel_grad_filename = ['./matrices/', matrixname, '_gradient_relative.mat'];
+abs_grad_filename = ['./matrices/', matrixname, '_gradient_absolute.mat'];
 
 % load preconditioner of matrix
 precond_filename = ['./matrices/', matrixname, '_precond.mat'];
@@ -92,9 +92,8 @@ for m = 1:M
         
 end
 
-sorted_rel = sort(grad_rel, 'descend');
-sorted_abs = sort(grad_abs, 'descend');
-save(abs_grad_filename, "grad_abs", "sorted_abs");
-save(rel_grad_filename, "grad_rel", "sorted_rel");
+
+save(abs_grad_filename, "grad_abs");
+save(rel_grad_filename, "grad_rel");
 
 end

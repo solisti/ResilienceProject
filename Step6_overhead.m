@@ -74,6 +74,50 @@ for m = 1:num_matrices
     sem_overheads1_random = std_overheads1_random/sqrt(num_exps);
     CI95_overheads1_random = CI95*sem_overheads1_random;
 
+    %% load analysis data by absolute gradient
+    CI95 = tinv([0.975], num_exps-1);  % 95% confidence interval
+    
+    protect_method = 'gradient'; 
+    analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
+    slowdowns_grad_abs = dlmread(analysis_filename);
+    slowdowns_grad_abs = slowdowns_grad_abs';
+    mean_slowdowns_grad_abs = mean(slowdowns_grad_abs);
+    std_slowdowns_grad_abs = std(slowdowns_grad_abs);
+    sem_slowdowns_grad_abs = std_slowdowns_grad_abs/sqrt(num_exps);
+    CI95_slowdowns_grad_abs = CI95*sem_slowdowns_grad_abs;
+    overheads1_grad_abs = slowdowns_grad_abs;
+    for p = 1:num_protects
+        protect = protects(p);
+        overheads1_grad_abs(:, p) = 100*((protect+1)*slowdowns_grad_abs(:, p)-1);
+    end
+    mean_overheads1_gradient = mean(overheads1_grad_abs);
+    std_overheads1_gradient = std(overheads1_grad_abs);
+    sem_overheads1_gradient = std_overheads1_gradient/sqrt(num_exps);
+    CI95_overheads1_gradient = CI95*sem_overheads1_gradient;
+    
+    %% load analysis data by relative gradient
+    CI95 = tinv([0.975], num_exps-1);  % 95% confidence interval
+    
+    protect_method = 'relgradient'; 
+    analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
+    slowdowns_grad_rel = dlmread(analysis_filename);
+    slowdowns_grad_rel = slowdowns_grad_rel';
+    mean_slowdowns_grad_rel = mean(slowdowns_grad_rel);
+    std_slowdowns_grad_rel = std(slowdowns_grad_rel);
+    sem_slowdowns_grad_rel = std_slowdowns_grad_rel/sqrt(num_exps);
+    CI95_slowdowns_grad_rel = CI95*sem_slowdowns_grad_rel;
+    overheads1_grad_rel = slowdowns_grad_rel;
+    for p = 1:num_protects
+        protect = protects(p);
+        overheads1_grad_rel(:, p) = 100*((protect+1)*slowdowns_grad_rel(:, p)-1);
+    end
+    mean_overheads1_grad_rel = mean(overheads1_grad_rel);
+    std_overheads1_grad_rel = std(overheads1_grad_rel);
+    sem_overheads1_grad_rel = std_overheads1_grad_rel/sqrt(num_exps);
+    CI95_overheads1_grad_rel = CI95*sem_overheads1_grad_rel;
+    
+
+
     %% plot figure
     figure;
     set(0,'defaultAxesTickLabelInterpreter','none');  
@@ -83,6 +127,10 @@ for m = 1:num_matrices
     errorbar(protects+0.005, mean_overheads1_Arow2norm, CI95_overheads1_Arow2norm, 'CapSize',1, 'LineWidth',0.7, 'Color','blue');
     errorbar(protects, mean_overheads1_random, CI95_overheads1_random, 'CapSize',1, 'LineWidth',0.7, 'Color','red');
     
+    plot(protects-0.005, mean_overheads1_gradient, 'g', 'LineWidth', 2);
+    plot(protects-0.005, mean_overheads1_grad_rel, 'y', 'LineWidth', 2);
+    errorbar(protects, mean_overheads1_gradient, CI95_overheads1_gradient, 'CapSize',1, 'LineWidth',0.7, 'Color','green');
+    errorbar(protects, mean_overheads1_grad_rel, CI95_overheads1_grad_rel, 'CapSize',1, 'LineWidth',0.7, 'Color','yellow');
     xlim([0, 1]);
     ylim([0, inf]);
     xlabel('Fraction of protection');
@@ -96,8 +144,12 @@ for m = 1:num_matrices
     hold on;
     plot(protects, mean_slowdowns_Arow2norm, 'b', 'LineWidth',2);
     plot(protects+0.005, mean_slowdowns_random, 'r', 'LineWidth',2);
+    plot(protects-0.005, mean_slowdowns_grad_abs, 'g', 'LineWidth',2);
+    plot(protects, mean_slowdowns_grad_rel, 'y', 'LineWidth',2);
     errorbar(protects+0.005, mean_slowdowns_random, CI95_slowdowns_random, 'CapSize',1, 'LineWidth',0.7, 'Color','red');
     errorbar(protects, mean_slowdowns_Arow2norm, CI95_slowdowns_Arow2norm, 'CapSize',1, 'LineWidth',0.7, 'Color', 'blue');
+    errorbar(protects, mean_slowdowns_grad_abs, CI95_slowdowns_grad_abs, 'CapSize',1, 'LineWidth',0.7, 'Color', 'green');
+    errorbar(protects, mean_slowdowns_grad_rel, CI95_slowdowns_grad_rel, 'CapSize',1, 'LineWidth',0.7, 'Color', 'yellow');
     legend('Our scheme', 'Random scheme', 'Location', 'NorthEast');
     xlabel('Fraction of protection');
     ylabel('Average slowdown (x times)');
