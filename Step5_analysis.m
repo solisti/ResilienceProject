@@ -37,8 +37,8 @@ for m = 1:num_matrices
     load(abs_grad_filename);
 %     get the index for sorted gradients, see line 27
 %     [~, sorted_g] = sort()
-    [~, sorted_rel] = sort(grad_rel, 'descend');
-    [~, sorted_abs] = sort(grad_abs, 'descend');
+    [~, sorted_rel] = sort(grad_rel, 'ascend');
+    [~, sorted_abs] = sort(grad_abs, 'ascend');
 
     error_positions = result(:, 4);
     noerror_converges = result(:, 7);

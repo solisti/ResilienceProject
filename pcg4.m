@@ -1,4 +1,4 @@
-function [x,flag,iter,diff_v,first_temp_gradient,first_rel_gradient] = pcg4(A,b,tol,maxit,M1,M2, inject_error,bitflip_pos,bitflip_iter)
+function [x,flag,iter,diff_v,first_temp_gradient,first_rel_gradient, pval] = pcg4(A,b,tol,maxit,M1,M2, inject_error,bitflip_pos,bitflip_iter)
 
 flag = 0;
 N = length(A);
@@ -35,6 +35,7 @@ while (iter < maxit) && (relres > tol)
         first_temp_gradient = abs(x- x1);
 %         second_temp_gradient = abs(x(bitflip_pos)- 2*x1(bitflip_pos) + x2(bitflip_pos));
         first_rel_gradient = abs((x-x1)./ x1); %ask about division by zero 
+        pval = p;
     end
 
 

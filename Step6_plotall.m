@@ -28,7 +28,7 @@ for m = 1:num_matrices
     %% load matrix norms
     norms_filename = ['./matrices/', matrixname, '_norms.mat'];
     load(norms_filename);
-    all_A_row_2norms = A_norms(:, 3);
+    all_A_row_2norms = A_row_2norm;
     all_sorted_A_row_2norms = sort(all_A_row_2norms);
     
     %% load experimental data

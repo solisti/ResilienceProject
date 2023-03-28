@@ -71,18 +71,21 @@ for m = 1:M
     inject_error = 1;
     bitflip_pos = E(:, m);
     bitflip_iter = indices(:,m);
+    % bitflip_iter = 16;
     
     load(iter_filename, 'noerror_converge');
     error_max_iter = noerror_converge*100;
     
 %         [~,flag,iter,diff_v] = pcg3(A, b, tol, error_max_iter, L, L', inject_error, bitflip_pos, bitflip_iter);
-    [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
+    [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient, p] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
     converge = iter;   % number of iterations in error-injecting run
 
     grad_abs(:, m) = first_temp_gradient;
     grad_rel(:, m) = first_rel_gradient;
 
-    result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge];
+    % p
+
+    result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, p'];
     dlmwrite(result_filename, result, '-append');
     
     disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);

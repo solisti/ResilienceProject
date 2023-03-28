@@ -39,6 +39,37 @@ for m = 1:num_matrices
     hold off;
     figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
     print(figure_filename, '-dpng');
+
+    %% load gradients
+    rel_grad_filename = ['./data/Step5_', matrixname, '_iter=', num2str(bitflip_iter), '_gradient', '.dat'];
+    abs_grad_filename = ['./matrices/', matrixname, '_gradient_absolute.mat'];
+    % gradients = dlmread(abs_grad_filename);
+
+    p = result(:, 9:15);
+    figure;
+    scatter(p, converge_ratios, mrk_size, mrk, 'filled', color);
+    set(gca,'xscale','log');
+    xlabel('p-value');
+    ylabel('Slowdown (x times)');
+    title(matrixname, 'interpreter', 'none');
+    set(gca,'FontSize',15);
+    hold off;
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'pval_'];
+    print(figure_filename, '-dpng');
+
+
+    % g = gradients(:,:);
+    load(abs_grad_filename);
+    figure;
+    scatter(grad_abs', converge_ratios, mrk_size, mrk, 'filled', color);
+    set(gca,'xscale','log');
+    xlabel('gradient');
+    ylabel('Slowdown (x times)');
+    title(matrixname, 'interpreter', 'none');
+    set(gca,'FontSize',15);
+    hold off;
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'gradient_'];
+    print(figure_filename, '-dpng');
 end 
     
 end
