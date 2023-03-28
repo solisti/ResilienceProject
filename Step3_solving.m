@@ -85,7 +85,7 @@ for m = 1:M
 
     % p
 
-    result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, p'];
+    result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, p(bitflip_pos),grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
     dlmwrite(result_filename, result, '-append');
     
     disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);

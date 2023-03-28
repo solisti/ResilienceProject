@@ -45,7 +45,7 @@ for m = 1:num_matrices
     abs_grad_filename = ['./matrices/', matrixname, '_gradient_absolute.mat'];
     % gradients = dlmread(abs_grad_filename);
 
-    p = result(:, 9:15);
+    p = result(:, 9);
     figure;
     scatter(p, converge_ratios, mrk_size, mrk, 'filled', color);
     set(gca,'xscale','log');
@@ -58,10 +58,10 @@ for m = 1:num_matrices
     print(figure_filename, '-dpng');
 
 
-    % g = gradients(:,:);
+    g = result(:,10);
     load(abs_grad_filename);
     figure;
-    scatter(grad_abs', converge_ratios, mrk_size, mrk, 'filled', color);
+    scatter(g, converge_ratios, mrk_size, mrk, 'filled', color);
     set(gca,'xscale','log');
     xlabel('gradient');
     ylabel('Slowdown (x times)');
