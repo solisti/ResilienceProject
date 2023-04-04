@@ -14,7 +14,7 @@ color = 'b';
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 1;
+bitflip_iter = 110;
 
 for m = 1:num_matrices
     matrixname = matrices{m};

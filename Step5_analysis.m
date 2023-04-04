@@ -12,7 +12,7 @@ comments = 'Step5';
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 1;
+bitflip_iter = 437;
 protects = [0:0.01:1];   % percentage of protection
 num_protects = length(protects);
 

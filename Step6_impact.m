@@ -12,17 +12,20 @@ color = 'b';
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 1;
+bitflip_iter = 110;
 
 for m = 1:num_matrices
     matrixname = matrices{m};
     disp(matrixname);
     
     %% load experimental data
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'error_no = 5', '.dat'];
     result = dlmread(result_filename);
-    noerror_converges = result(:, 7);
-    converges = result(:, 8);
+    % noerror_converges = result(:, 7);
+    % converges = result(:, 8);
+    % for multiple errors
+    noerror_converges = result(:, 5);
+    converges = result(:, 6);
     converge_ratios = converges./noerror_converges;
     
     %% plot figure
