@@ -37,7 +37,7 @@ for m = 1:num_matrices
     ylabel('Slowdown (x times)');
     set(gca,'FontSize',15);
     
-    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'error5'];
     print(figure_filename, '-dpng');
     %close all;
 end 

@@ -12,7 +12,7 @@ comments = 'Step5';
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 437;
+bitflip_iter = 110;
 protects = [0:0.01:1];   % percentage of protection
 num_protects = length(protects);
 
@@ -28,7 +28,7 @@ for m = 1:num_matrices
     rand_positions = randperm(N);
     
     %% load experimental data
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'all','.dat'];
     result = dlmread(result_filename);
 
     rel_grad_filename = ['./matrices/', matrixname, '_gradient_relative.mat'];

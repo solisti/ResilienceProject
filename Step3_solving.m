@@ -79,13 +79,13 @@ end
 % for i = injections
     bitflip_iter = 110;
     % bitflip_pos = error_2;
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'error_no = 5', '.dat'];
-    pos_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'error_no = 2, error_pos', '.dat'];
+    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'all', '.dat'];
+    pos_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'all', '.dat'];
     for m = 1:M
 
         % Inject errors from Experiment 1 to M, each at a random location 
         inject_error = 1;
-        bitflip_pos = error_5(:, m);
+        bitflip_pos = E(:, m);
         % bitflip_iter = indices(:,m);
 
 
@@ -102,8 +102,8 @@ end
     
         % p
     
-        % result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, p(bitflip_pos),grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
-        result = [N,flag,bitflip_iter,diff_v,noerror_converge,converge]; % for multiple bitflip positions
+        result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, p(bitflip_pos),grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
+        % result = [N,flag,bitflip_iter,diff_v,noerror_converge,converge]; % for multiple bitflip positions
         % pos_info = [A_row_2norm(bitflip_pos), p(bitflip_pos), grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
         dlmwrite(result_filename, result, '-append');
         % dlmwrite(pos_filename, pos_info, '-append');
