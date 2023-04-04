@@ -19,13 +19,13 @@ for m = 1:num_matrices
     disp(matrixname);
     
     %% load experimental data
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'error_no = 5', '.dat'];
+    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
     result = dlmread(result_filename);
-    % noerror_converges = result(:, 7);
-    % converges = result(:, 8);
+    noerror_converges = result(:, 7);
+    converges = result(:, 8);
     % for multiple errors
-    noerror_converges = result(:, 5);
-    converges = result(:, 6);
+    % noerror_converges = result(:, 5);
+    % converges = result(:, 6);
     converge_ratios = converges./noerror_converges;
     
     %% plot figure
@@ -37,7 +37,7 @@ for m = 1:num_matrices
     ylabel('Slowdown (x times)');
     set(gca,'FontSize',15);
     
-    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'error5'];
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
     print(figure_filename, '-dpng');
     %close all;
 end 

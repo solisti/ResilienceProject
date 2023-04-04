@@ -11,7 +11,7 @@ close all;
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 110;
+bitflip_iter = 2;
 protects = [0:0.01:1];
 num_protects = length(protects);
 
@@ -25,7 +25,7 @@ for m = 1:num_matrices
     A = Problem.A;
     
     %% load experimental data
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter),'all', '.dat'];
+    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
     result = dlmread(result_filename);
     noerror_converges = result(:, 7);
     converges = result(:, 8);

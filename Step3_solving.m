@@ -65,22 +65,22 @@ else % file already exists, then just load the file
     M = length(E);
 end
 
-temp_error = ['./matrices/', matrixname, '_temp_error.mat'];
-if exist(temp_error, 'file') < 1
-    error_2 = randi(N, [2, M]);
-    error_5 = randi(N, [5, M]);
-    % E = randi(N, [num_elements, M]);
-    save(temp_error, 'error_2', 'error_5');
-else
-    load(temp_error, 'error_2', 'error_5');
-end 
+% temp_error = ['./matrices/', matrixname, '_temp_error.mat'];
+% if exist(temp_error, 'file') < 1
+%     error_2 = randi(N, [2, M]);
+%     error_5 = randi(N, [5, M]);
+%     % E = randi(N, [num_elements, M]);
+%     save(temp_error, 'error_2', 'error_5');
+% else
+%     load(temp_error, 'error_2', 'error_5');
+% end 
 
 %% start pcg 
 % for i = injections
     bitflip_iter = 110;
     % bitflip_pos = error_2;
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'all', '.dat'];
-    pos_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), 'all', '.dat'];
+    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+    % pos_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
     for m = 1:M
 
         % Inject errors from Experiment 1 to M, each at a random location 
@@ -102,7 +102,7 @@ end
     
         % p
     
-        result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, p(bitflip_pos),grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
+        result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, max(p),grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
         % result = [N,flag,bitflip_iter,diff_v,noerror_converge,converge]; % for multiple bitflip positions
         % pos_info = [A_row_2norm(bitflip_pos), p(bitflip_pos), grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
         dlmwrite(result_filename, result, '-append');
