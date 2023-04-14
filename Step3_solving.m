@@ -53,6 +53,10 @@ if exist(new_error, 'file') < 1 % file does not exist
         load(iter_filename, 'noerror_converge');
 %         num_elements = ceil(noerror_converge * fraction);
         error_max_iter = noerror_converge*100;
+
+        if noerror_converge < M
+            M = noerror_converge;
+        end
         
         indices = datasample([1:noerror_converge], M, 'Replace',false); % find the interations we want to inject error in
         E = datasample([1:N], M, 'Replace',false); % error in M random locations from 1 to N
@@ -65,30 +69,15 @@ else % file already exists, then just load the file
     M = length(E);
 end
 
-% temp_error = ['./matrices/', matrixname, '_temp_error.mat'];
-% if exist(temp_error, 'file') < 1
-%     error_2 = randi(N, [2, M]);
-%     error_5 = randi(N, [5, M]);
-%     % E = randi(N, [num_elements, M]);
-%     save(temp_error, 'error_2', 'error_5');
-% else
-%     load(temp_error, 'error_2', 'error_5');
-% end 
-
 %% start pcg 
-% for i = injections
-    bitflip_iter = 110;
-    % bitflip_pos = error_2;
+for i = injections
+    bitflip_iter = i;
     result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-    % pos_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
     for m = 1:M
 
         % Inject errors from Experiment 1 to M, each at a random location 
         inject_error = 1;
         bitflip_pos = E(:, m);
-        % bitflip_iter = indices(:,m);
-
-
         
         load(iter_filename, 'noerror_converge');
         error_max_iter = noerror_converge*100;
@@ -100,13 +89,8 @@ end
         grad_abs(:, m) = first_temp_gradient;
         grad_rel(:, m) = first_rel_gradient;
     
-        % p
-    
         result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, max(p),grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
-        % result = [N,flag,bitflip_iter,diff_v,noerror_converge,converge]; % for multiple bitflip positions
-        % pos_info = [A_row_2norm(bitflip_pos), p(bitflip_pos), grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
         dlmwrite(result_filename, result, '-append');
-        % dlmwrite(pos_filename, pos_info, '-append');
         
         disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);
         if flag == 1
@@ -114,7 +98,7 @@ end
         end
     end
         
-% end
+end
 
 
 save(abs_grad_filename, "grad_abs");

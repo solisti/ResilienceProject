@@ -5,10 +5,10 @@ function Step2_matrices
 % called. The preconditioner matrix and row-2 norms are saved in the same
 % directory as the original  matrix. 
 
-%matrices = {'cvxbqp1', 'thermal1', 'nd6k', ...
-%    'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e', 'm_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', ...
-%    'Trefethen_20000', 'vanbody','wathen100'};
-matrices = {'bcsstk18'};
+matrices = {'cvxbqp1', 'thermal1', 'nd6k', ...
+   'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e', 'm_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', ...
+   'Trefethen_20000', 'vanbody','wathen100'};
+% matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
 opt_type = 'ict'; % 'nofill'
