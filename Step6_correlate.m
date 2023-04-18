@@ -14,7 +14,7 @@ color = 'b';
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 2;
+bitflip_iter = 1;
 
 for m = 1:num_matrices
     matrixname = matrices{m};
@@ -71,7 +71,35 @@ for m = 1:num_matrices
     figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'gradient_'];
     print(figure_filename, '-dpng');
 
-    
+    figure;
+    x = result(:,13);
+    scatter(x, converge_ratios, mrk_size, mrk, 'filled', color);
+    set(gca, 'xscale');
+    xlabel('x-values');
+    ylabel('Slowdown');
+    title(matrixname, 'interpreter', 'none');
+    set(gca, 'FontSize', 15);
+   
+
+    hold off;
+
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_x'];
+    print(figure_filename, '-dpng');
+
+    figure;
+    sg = result(:,12);
+    scatter(sg, converge_ratios, mrk_size, mrk, 'filled', color);
+    set(gca, 'xscale');
+    xlabel('gradient (not absolute)');
+    ylabel('Slowdown');
+    title(matrixname, 'interpreter', 'none');
+    set(gca, 'FontSize', 15);
+   
+
+    hold off;
+
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_grad(no_abs)'];
+    print(figure_filename, '-dpng');
 
 end 
     

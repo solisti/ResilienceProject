@@ -70,8 +70,8 @@ else % file already exists, then just load the file
 end
 
 %% start pcg 
-for i = injections
-    bitflip_iter = i;
+% for i = injections
+    bitflip_iter = 1;
     result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
     for m = 1:M
 
@@ -82,13 +82,13 @@ for i = injections
         load(iter_filename, 'noerror_converge');
         error_max_iter = noerror_converge*100;
         
-        [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient, p] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
+        [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient, p, standard_gradient, xval] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
         converge = iter;   % number of iterations in error-injecting run
     
         grad_abs(:, m) = first_temp_gradient;
         grad_rel(:, m) = first_rel_gradient;
     
-        result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, max(p),grad_abs(bitflip_pos), grad_rel(bitflip_pos)];
+        result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, max(p),grad_abs(bitflip_pos), grad_rel(bitflip_pos), standard_gradient(bitflip_pos), xval(bitflip_pos)];
         dlmwrite(result_filename, result, '-append');
         
         disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(converge)]);
@@ -97,7 +97,7 @@ for i = injections
         end
     end
         
-end
+% end
 
 
 save(abs_grad_filename, "grad_abs");
