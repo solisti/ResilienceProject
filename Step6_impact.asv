@@ -36,15 +36,15 @@ for m = 1:num_matrices
         converge_ratios = converges./noerror_converges;
         
         %% plot figure
-        plot(converge_ratios, 'DisplayName',num2str(i));
+        plot(sort(converge_ratios), 'DisplayName',num2str(i));
         title(matrixname, 'interpreter', 'none');
         %set(gca,'xscale','log');
         xlabel('Sample runs');
         ylabel('Slowdown (x times)');
-        legend();
+        % % legend(i)
         set(gca,'FontSize',15);
         % hold off;
-        comments = 'impact_unsorted';
+        comments = 'impact_sorted';
         figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
         print(figure_filename, '-dpng');
         %close all;

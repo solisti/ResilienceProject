@@ -82,7 +82,6 @@ for i = injections
         load(iter_filename, 'noerror_converge');
         error_max_iter = noerror_converge*100;
         
-    %         [~,flag,iter,diff_v] = pcg3(A, b, tol, error_max_iter, L, L', inject_error, bitflip_pos, bitflip_iter);
         [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient, p] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
         converge = iter;   % number of iterations in error-injecting run
     
