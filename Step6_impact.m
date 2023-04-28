@@ -12,34 +12,59 @@ color = 'b';
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 110;
+% bitflip_iter = 110;
+
+
+
 
 for m = 1:num_matrices
     matrixname = matrices{m};
     disp(matrixname);
-    
-    %% load experimental data
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-    result = dlmread(result_filename);
-    noerror_converges = result(:, 7);
-    converges = result(:, 8);
-    % for multiple errors
-    % noerror_converges = result(:, 5);
-    % converges = result(:, 6);
-    converge_ratios = converges./noerror_converges;
-    
-    %% plot figure
+
+    new_error = ['./matrices/', matrixname, '_newerror.mat'];
+    load(new_error, 'injections');
     figure;
-    bar(sort(converge_ratios), 'FaceColor', color);
-    title(matrixname, 'interpreter', 'none');
-    %set(gca,'xscale','log');
-    xlabel('Sample runs');
-    ylabel('Slowdown (x times)');
-    set(gca,'FontSize',15);
+    hold on;
+    for i = injections
+        bitflip_iter = i;
+        result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+        %% load experimental data
+        % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+        result = dlmread(result_filename);
+        noerror_converges = result(:, 7);
+        converges = result(:, 8);
+        converge_ratios = converges./noerror_converges;
+        
+        %% plot figure
+        plot(converge_ratios, 'DisplayName',num2str(i));
+        title(matrixname, 'interpreter', 'none');
+        %set(gca,'xscale','log');
+        xlabel('Sample runs');
+        ylabel('Slowdown (x times)');
+        legend();
+        set(gca,'FontSize',15);
+        % hold off;
+        comments = 'impact_unsorted';
+        figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+        print(figure_filename, '-dpng');
+        %close all;
     
-    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
-    print(figure_filename, '-dpng');
-    %close all;
-end 
     
+        % %% plot unsorted figure
+        % figure;
+        % hold on;
+        % plot(converge_ratios);
+        % title(matrixname, 'interpreter', 'none');
+        % %set(gca,'xscale','log');
+        % xlabel('Sample runs');
+        % ylabel('Slowdown (x times)');
+        % set(gca,'FontSize',15);
+        % hold off;
+        % comments = 'impact_unsorted'
+        % figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+        % print(figure_filename, '-dpng');
+        
+    end 
+end
+
 end

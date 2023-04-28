@@ -14,7 +14,7 @@ color = 'b';
 matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
-bitflip_iter = 110;
+bitflip_iter = 1;
 
 for m = 1:num_matrices
     matrixname = matrices{m};
@@ -31,7 +31,7 @@ for m = 1:num_matrices
     %% slowdown figure
     figure;
     scatter(A_row_2norms, converge_ratios, mrk_size, mrk, 'filled', color);
-    set(gca,'xscale','log');
+    set(gca,'xscale');
     xlabel('Row 2-norm of matrix A');
     ylabel('Slowdown (x times)');
     title(matrixname, 'interpreter', 'none');
@@ -48,7 +48,7 @@ for m = 1:num_matrices
     p = result(:, 9);
     figure;
     scatter(p, converge_ratios, mrk_size, mrk, 'filled', color);
-    set(gca,'xscale','log');
+    set(gca,'xscale');
     xlabel('p-value');
     ylabel('Slowdown (x times)');
     title(matrixname, 'interpreter', 'none');
@@ -62,7 +62,7 @@ for m = 1:num_matrices
     load(abs_grad_filename);
     figure;
     scatter(g, converge_ratios, mrk_size, mrk, 'filled', color);
-    set(gca,'xscale','log');
+    set(gca,'xscale');
     xlabel('gradient');
     ylabel('Slowdown (x times)');
     title(matrixname, 'interpreter', 'none');
@@ -70,6 +70,37 @@ for m = 1:num_matrices
     hold off;
     figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'gradient_'];
     print(figure_filename, '-dpng');
+
+    figure;
+    x = result(:,13);
+    scatter(x, converge_ratios, mrk_size, mrk, 'filled', color);
+    set(gca, 'xscale');
+    xlabel('x-values');
+    ylabel('Slowdown');
+    title(matrixname, 'interpreter', 'none');
+    set(gca, 'FontSize', 15);
+   
+
+    hold off;
+
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_x'];
+    print(figure_filename, '-dpng');
+
+    figure;
+    sg = result(:,12);
+    scatter(sg, converge_ratios, mrk_size, mrk, 'filled', color);
+    set(gca, 'xscale');
+    xlabel('gradient (not absolute)');
+    ylabel('Slowdown');
+    title(matrixname, 'interpreter', 'none');
+    set(gca, 'FontSize', 15);
+   
+
+    hold off;
+
+    figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_grad(no_abs)'];
+    print(figure_filename, '-dpng');
+
 end 
     
 end
