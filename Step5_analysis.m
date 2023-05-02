@@ -53,9 +53,12 @@ for m = 1:num_matrices
         load(rel_grad_filename);
         load(abs_grad_filename);
     %     get the index for sorted gradients, see line 27
-    %     [~, sorted_g] = sort()
+        grad_rel(isnan(grad_rel)) = 0;
+        grad_abs(isnan(grad_rel)) = 0;
+
         [~, sorted_rel] = sort(grad_rel, 'ascend');
         [~, sorted_abs] = sort(grad_abs, 'ascend');
+        [~, sorted_xval] = sort(grad_abs, 'descend');
     
         error_positions = result(:, 4);
         noerror_converges = result(:, 7);
@@ -155,7 +158,7 @@ for m = 1:num_matrices
         for p = 1:num_protects
             protect_percent = protects(p);
             protect_number = ceil(protect_percent * N);
-            protect_positions = sorted_rel(1:protect_number); %replace rand_pos with whatever i have 
+            protect_positions = sorted_xval(1:protect_number); %replace rand_pos with whatever i have 
             for e = 1:num_exps
                 error_position = error_positions(e);
                 converge_ratio = converge_ratios(e);
