@@ -21,6 +21,16 @@ for m = 1:num_matrices
     matrixname = matrices{m};
     disp(matrixname);
     
+    % create new folders for these matrices if they don't already exist 
+    path = ['./figures/', matrixname];
+    if exist(path, 'dir') ~= 7
+        mkdir(path);
+    end
+
+    new_error = ['./matrices/', matrixname, '_newerror.mat'];
+    load(new_error, 'injections');
+
+    
     %% load experimental data
     result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
     result = dlmread(result_filename);

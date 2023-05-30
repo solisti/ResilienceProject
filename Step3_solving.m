@@ -14,8 +14,13 @@ disp('Done loading matrix');
 drawnow('update');
 [N, ~] = size(A);
 % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-rel_grad_filename = ['./matrices/', matrixname, '_gradient_relative.mat'];
-abs_grad_filename = ['./matrices/', matrixname, '_gradient_absolute.mat'];
+
+% create new folders for these matrices if they don't already exist 
+path = ['./figures/', matrixname];
+if exist(path, 'dir') ~= 7
+    mkdir(path);
+end
+
 
 % load preconditioner of matrix
 precond_filename = ['./matrices/', matrixname, '_precond.mat'];
@@ -70,9 +75,12 @@ else % file already exists, then just load the file
 end
 
 %% start pcg 
-% for i = injections
-    bitflip_iter = 1;
-    result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+for i = injections
+    bitflip_iter = i;
+    result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+    rel_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_relative.mat'];
+    abs_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_absolute.mat'];
+    xval_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_xval.mat'];
     for m = 1:M
 
         % Inject errors from Experiment 1 to M, each at a random location 
@@ -82,10 +90,10 @@ end
         load(iter_filename, 'noerror_converge');
         error_max_iter = noerror_converge*100;
         
-        [~,flag,iter,diff_v,first_temp_gradient,first_rel_gradient, p, standard_gradient, xval] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
+        [~,flag,iter,diff_v,first_abs_gradient,first_rel_gradient, p, standard_gradient, xval] = pcg4(A,b,tol,error_max_iter,L,L', inject_error,bitflip_pos,bitflip_iter);
         converge = iter;   % number of iterations in error-injecting run
     
-        grad_abs(:, m) = first_temp_gradient;
+        grad_abs(:, m) = first_abs_gradient;
         grad_rel(:, m) = first_rel_gradient;
     
         result = [N,flag,bitflip_iter,bitflip_pos,diff_v,A_row_2norm(bitflip_pos),noerror_converge,converge, max(p),grad_abs(bitflip_pos), grad_rel(bitflip_pos), standard_gradient(bitflip_pos), xval(bitflip_pos)];
@@ -95,12 +103,19 @@ end
         if flag == 1
             disp('did not converged');
         end
+
+        % save gradient information from the first experiment 
+        if m == 1
+            save(abs_grad_filename, "grad_abs");
+            save(rel_grad_filename, "grad_rel");
+            save(xval_filename, "xval");
+        end 
     end
+
         
-% end
+end
 
 
-save(abs_grad_filename, "grad_abs");
-save(rel_grad_filename, "grad_rel");
+
 
 end

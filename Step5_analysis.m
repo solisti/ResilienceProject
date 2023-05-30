@@ -9,8 +9,8 @@ comments = 'Step5';
 % matrices = {'cvxbqp1', 'thermal1', 'nd6k', ...
 %    'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e', 'm_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', ...
 %    'Trefethen_20000', 'vanbody','wathen100'};
-% matrices = {'bcsstk18'};
-matrices = {'cvxbqp1', 'thermal1', 'nd6k', 'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e'};
+matrices = {'bcsstk18'};
+% matrices = {'cvxbqp1', 'thermal1', 'nd6k', 'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e'};
 num_matrices = length(matrices);
 
 % bitflip_iter = 110;
@@ -36,6 +36,8 @@ for m = 1:num_matrices
         mkdir(path);
     end
 
+    % bitflip_iter = 2; 
+
     for bitflip_iter = injections
         %% load matrix norms
         norms_filename = ['./matrices/', matrixname, '_norms.mat'];
@@ -45,20 +47,23 @@ for m = 1:num_matrices
         rand_positions = randperm(N);
         
         %% load experimental data
-        result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+        result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);
     
-        rel_grad_filename = ['./matrices/', matrixname, '_gradient_relative.mat'];
-        abs_grad_filename = ['./matrices/', matrixname, '_gradient_absolute.mat'];
+        rel_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_relative.mat'];
+        abs_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_absolute.mat'];
+        xval_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_xval.mat'];
         load(rel_grad_filename);
         load(abs_grad_filename);
-    %     get the index for sorted gradients, see line 27
+        % load(xval_filename);
+        
+
         grad_rel(isnan(grad_rel)) = 0;
         grad_abs(isnan(grad_rel)) = 0;
 
         [~, sorted_rel] = sort(grad_rel, 'ascend');
         [~, sorted_abs] = sort(grad_abs, 'ascend');
-        [~, sorted_xval] = sort(grad_abs, 'descend');
+        % [~, sorted_xval] = sort(xval, 'descend');
     
         error_positions = result(:, 4);
         noerror_converges = result(:, 7);
@@ -108,7 +113,7 @@ for m = 1:num_matrices
         end
         dlmwrite(analysis_filename, slowdowns);
     
-        %% analyze data by gradient
+        %% analyze data by absoluted gradient
         protect_method = 'absgradient'; 
         analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
         % analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
@@ -151,25 +156,25 @@ for m = 1:num_matrices
         dlmwrite(analysis_filename, slowdowns);
     
         %% analyze data by x value
-        protect_method = 'xval'; 
-        analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
+        % protect_method = 'xval'; 
+        % analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
         % analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
-        slowdowns = zeros(num_protects, num_exps);
-        for p = 1:num_protects
-            protect_percent = protects(p);
-            protect_number = ceil(protect_percent * N);
-            protect_positions = sorted_xval(1:protect_number); %replace rand_pos with whatever i have 
-            for e = 1:num_exps
-                error_position = error_positions(e);
-                converge_ratio = converge_ratios(e);
-                if ismember(error_position, protect_positions)
-                    slowdowns(p, e) = 1;
-                else
-                    slowdowns(p, e) = converge_ratio; 
-                end
-            end
-        end
-        dlmwrite(analysis_filename, slowdowns);        
+        % slowdowns = zeros(num_protects, num_exps);
+        % for p = 1:num_protects
+        %     protect_percent = protects(p);
+        %     protect_number = ceil(protect_percent * N);
+        %     protect_positions = sorted_xval(1:protect_number); %replace rand_pos with whatever i have 
+        %     for e = 1:num_exps
+        %         error_position = error_positions(e);
+        %         converge_ratio = converge_ratios(e);
+        %         if ismember(error_position, protect_positions)
+        %             slowdowns(p, e) = 1;
+        %         else
+        %             slowdowns(p, e) = converge_ratio; 
+        %         end
+        %     end
+        % end
+        % dlmwrite(analysis_filename, slowdowns);        
     end 
 
 end 
