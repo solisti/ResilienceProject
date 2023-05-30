@@ -8,11 +8,11 @@ close all;
 %matrices = {'cvxbqp1', 'thermal1', 'nd6k', ...
 %    'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e', 'm_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', ...
 %    'Trefethen_20000', 'vanbody','wathen100'};
-matrices = {'bcsstk18'};
+matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
 % matrices = {'cvxbqp1', 'thermal1', 'nd6k', 'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e'};
 num_matrices = length(matrices);
 
-bitflip_iter = 2;
+% bitflip_iter = 2;
 protects = [0:0.01:1];
 num_protects = length(protects);
 
@@ -39,7 +39,6 @@ for m = 1:num_matrices
 
          %% load experimental data
         result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-        % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);
         noerror_converges = result(:, 7);
         converges = result(:, 8);
@@ -51,7 +50,6 @@ for m = 1:num_matrices
         
         protect_method = 'Arow2norm';   
         analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
-        % analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
         slowdowns_Arow2norm = dlmread(analysis_filename);
         slowdowns_Arow2norm = slowdowns_Arow2norm';
         mean_slowdowns_Arow2norm = mean(slowdowns_Arow2norm);
@@ -72,8 +70,7 @@ for m = 1:num_matrices
         CI95 = tinv([0.975], num_exps-1);  % 95% confidence interval
         
         protect_method = 'random'; 
-        analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
-        % analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
+        analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];     
         slowdowns_random = dlmread(analysis_filename);
         slowdowns_random = slowdowns_random';
         mean_slowdowns_random = mean(slowdowns_random);
@@ -95,7 +92,6 @@ for m = 1:num_matrices
         
         protect_method = 'absgradient'; 
         analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
-        % analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
         slowdowns_grad_abs = dlmread(analysis_filename);
         slowdowns_grad_abs = slowdowns_grad_abs';
         mean_slowdowns_grad_abs = mean(slowdowns_grad_abs);
@@ -117,7 +113,6 @@ for m = 1:num_matrices
         
         protect_method = 'relgradient'; 
         analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
-        % analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
         slowdowns_grad_rel = dlmread(analysis_filename);
         slowdowns_grad_rel = slowdowns_grad_rel';
         mean_slowdowns_grad_rel = mean(slowdowns_grad_rel);
@@ -136,26 +131,25 @@ for m = 1:num_matrices
         
     
         %% load analysis data by x value
-        % CI95 = tinv([0.975], num_exps-1);  % 95% confidence interval
-        % 
-        % protect_method = 'xval'; 
-        % analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
-        % % analysis_filename = ['./data/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
-        % slowdowns_xval = dlmread(analysis_filename);
-        % slowdowns_xval = slowdowns_xval';
-        % mean_slowdowns_xval = mean(slowdowns_xval);
-        % % std_slowdowns_grad_rel = std(slowdowns_grad_rel);
-        % % sem_slowdowns_grad_rel = std_slowdowns_grad_rel/sqrt(num_exps);
-        % % CI95_slowdowns_grad_rel = CI95*sem_slowdowns_grad_rel;
-        % overheads1_xval = slowdowns_grad_rel;
-        % for p = 1:num_protects
-        %     protect = protects(p);
-        %     overheads1_xval(:, p) = 100*((protect+1)*slowdowns_xval(:, p)-1);
-        % end
-        % mean_overheads1_xval = mean(overheads1_xval);
-        % % std_overheads1_grad_rel = std(overheads1_grad_rel);
-        % % sem_overheads1_grad_rel = std_overheads1_grad_rel/sqrt(num_exps);
-        % % CI95_overheads1_grad_rel = CI95*sem_overheads1_grad_rel;
+        CI95 = tinv([0.975], num_exps-1);  % 95% confidence interval
+
+        protect_method = 'xval'; 
+        analysis_filename = ['./data/', matrixname, '/', comments, '_', matrixname, '_iter=', num2str(bitflip_iter), '_', protect_method, '.dat'];
+        slowdowns_xval = dlmread(analysis_filename);
+        slowdowns_xval = slowdowns_xval';
+        mean_slowdowns_xval = mean(slowdowns_xval);
+        % std_slowdowns_grad_rel = std(slowdowns_grad_rel);
+        % sem_slowdowns_grad_rel = std_slowdowns_grad_rel/sqrt(num_exps);
+        % CI95_slowdowns_grad_rel = CI95*sem_slowdowns_grad_rel;
+        overheads1_xval = slowdowns_grad_rel;
+        for p = 1:num_protects
+            protect = protects(p);
+            overheads1_xval(:, p) = 100*((protect+1)*slowdowns_xval(:, p)-1);
+        end
+        mean_overheads1_xval = mean(overheads1_xval);
+        % std_overheads1_grad_rel = std(overheads1_grad_rel);
+        % sem_overheads1_grad_rel = std_overheads1_grad_rel/sqrt(num_exps);
+        % CI95_overheads1_grad_rel = CI95*sem_overheads1_grad_rel;
     
     
         %% plot figure
@@ -169,7 +163,7 @@ for m = 1:num_matrices
         
         plot(protects-0.005, mean_overheads1_gradient, 'g', 'LineWidth', 2);
         plot(protects-0.005, mean_overheads1_grad_rel, 'y', 'LineWidth', 2);
-        % plot(protects, mean_overheads1_xval, 'c', 'LineWidth', 2);
+        plot(protects, mean_overheads1_xval, 'c', 'LineWidth', 2);
         % errorbar(protects, mean_overheads1_gradient, CI95_overheads1_gradient, 'CapSize',1, 'LineWidth',0.7, 'Color','green');
         % errorbar(protects, mean_overheads1_grad_rel, CI95_overheads1_grad_rel, 'CapSize',1, 'LineWidth',0.7, 'Color','yellow');
         xlim([0, 1]);
@@ -189,7 +183,7 @@ for m = 1:num_matrices
         plot(protects+0.005, mean_slowdowns_random, 'r', 'LineWidth',2);
         plot(protects-0.005, mean_slowdowns_grad_abs, 'g', 'LineWidth',2);
         plot(protects, mean_slowdowns_grad_rel, 'y', 'LineWidth',2);
-        % plot(protects, mean_slowdowns_xval, 'c', 'LineWidth',2);
+        plot(protects, mean_slowdowns_xval, 'c', 'LineWidth',2);
         % errorbar(protects+0.005, mean_slowdowns_random, CI95_slowdowns_random, 'CapSize',1, 'LineWidth',0.7, 'Color','red');
         % errorbar(protects, mean_slowdowns_Arow2norm, CI95_slowdowns_Arow2norm, 'CapSize',1, 'LineWidth',0.7, 'Color', 'blue');
         % errorbar(protects, mean_slowdowns_grad_abs, CI95_slowdowns_grad_abs, 'CapSize',1, 'LineWidth',0.7, 'Color', 'green');

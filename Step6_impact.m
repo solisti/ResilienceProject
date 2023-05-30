@@ -10,7 +10,7 @@ color = 'b';
 %    'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e', 'm_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', ...
 %    'Trefethen_20000', 'vanbody','wathen100'};
 % matrices = {'bcsstk18'};
-matrices = {'cvxbqp1', 'thermal1', 'nd6k', 'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e'};
+matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
 num_matrices = length(matrices);
 
 % bitflip_iter = 110;
@@ -34,9 +34,7 @@ for m = 1:num_matrices
 
     for i = injections
         bitflip_iter = i;
-        result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-        %% load experimental data
-        % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+        result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);
         noerror_converges = result(:, 7);
         converges = result(:, 8);
@@ -80,9 +78,8 @@ for m = 1:num_matrices
     figure;
     for i = injections
         bitflip_iter = i;
-        result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+        result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         %% load experimental data
-        % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);
         noerror_converges = result(:, 7);
         converges = result(:, 8);

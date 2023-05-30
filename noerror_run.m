@@ -58,8 +58,6 @@ for m = 0:M
 
     inject_error = 0;
     [~,flag,iter,~,~,~,~,~,~] = pcg4(A, b, tol, max_iter, L, L', inject_error, 0, 0);
-    % [~,flag,iter,~,~,~,~,~,~]
-    % [x,flag,iter,diff_v,first_temp_gradient,first_rel_gradient, pval, standard_gradient, xval] = pcg4(A, b, tol, max_iter, L, L', inject_error, 0, 0);
     
     if flag == 1
        disp('error-free execution does not converge');
