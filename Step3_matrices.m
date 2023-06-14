@@ -9,7 +9,10 @@ function Step3_matrices
 
 % matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
 
-matrices = {'vanbody', 'pwtk'};
+% matrices = {'vanbody', 'pwtk'};
+
+% matrices = {'cbuckle'}
+matrices = {'pwtk'};
 
 % matrices = {'m_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', 'Trefethen_20000', 'vanbody','wathen100'};
 % matrices = {'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', 'Trefethen_20000', 'vanbody','wathen100'};
