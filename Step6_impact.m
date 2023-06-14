@@ -107,7 +107,7 @@ for m = 1:num_matrices
     % plot unsorted
     for i = injections
         bitflip_iter = i;
-        result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+        result_filename = ['./data/' matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         %% load experimental data
         % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);

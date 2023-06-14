@@ -7,7 +7,9 @@ function Step3_matrices
 %    'bcsstk18', 'bodyy5', 'cbuckle', 'Pres_Poisson', 'bcsstk36', 'ct20stif', 'gyro_m', 't2dah_e', 'm_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', ...
 %    'Trefethen_20000', 'vanbody','wathen100'};
 
-matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
+% matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
+
+matrices = {'vanbody', 'pwtk'};
 
 % matrices = {'m_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', 'Trefethen_20000', 'vanbody','wathen100'};
 % matrices = {'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', 'Trefethen_20000', 'vanbody','wathen100'};

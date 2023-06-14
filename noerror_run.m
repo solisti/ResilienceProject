@@ -51,11 +51,18 @@ end
 
 % create iterations file
 iter_filename = ['./matrices/', matrixname, '_convergence.mat'];
-% total_iterations = {};
+
+
+% create new folders for these matrices if they don't already exist 
+path = ['./data/', matrixname];
+if exist(path, 'dir') ~= 7
+    mkdir(path);
+end
 
 %% start pcg 
-for m = 0:M
+% for m = 0:M
 
+    m = 0;
     inject_error = 0;
     [~,flag,iter,~,~,~,~,~,~] = pcg4(A, b, tol, max_iter, L, L', inject_error, 0, 0);
     
@@ -67,6 +74,6 @@ for m = 0:M
     error_max_iter = noerror_converge*100;   % set max number of iterations to run when injecting errors (100x)
     disp(['Matrix = ', matrixname, ', Experiment=', num2str(m), ', converge=', num2str(noerror_converge)]);
     save(iter_filename, 'noerror_converge');
-end
+% end
 
 end

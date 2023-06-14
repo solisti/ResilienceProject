@@ -49,7 +49,7 @@ for m = 1:num_matrices
         title(matrixname, 'interpreter', 'none');
         set(gca,'FontSize',15);
         hold off;
-        figure_filename = ['./figures/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_row2norm'];
         print(figure_filename, '-dpng');
     
         %% load gradients
@@ -65,7 +65,7 @@ for m = 1:num_matrices
         title(matrixname, 'interpreter', 'none');
         set(gca,'FontSize',15);
         hold off;
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'pval_'];
+        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_gradient_relative'];
         print(figure_filename, '-dpng');
     
     
@@ -78,7 +78,7 @@ for m = 1:num_matrices
         title(matrixname, 'interpreter', 'none');
         set(gca,'FontSize',15);
         hold off;
-        figure_filename = ['./figures/', matrixname, '/',comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'gradient_'];
+        figure_filename = ['./figures/', matrixname, '/',comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'gradient_absolute'];
         print(figure_filename, '-dpng');
     
         figure;
@@ -110,6 +110,8 @@ for m = 1:num_matrices
     
         figure_filename = ['./figures/', matrixname, '/',comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_grad(no_abs)'];
         print(figure_filename, '-dpng');
+
+        hold off; 
     end 
     
     close all;
