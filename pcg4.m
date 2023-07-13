@@ -1,4 +1,4 @@
-function [x,flag,iter,diff_v,first_abs_gradient,first_rel_gradient, pval, standard_gradient, xval] = pcg4(A,b,tol,maxit,M1,M2, inject_error,bitflip_pos,bitflip_iter)
+function [x,flag,iter,diff_v,first_abs_gradient,first_rel_gradient, pval, standard_gradient, xval, error_iter] = pcg4(A,b,tol,maxit,M1,M2, inject_error,bitflip_pos,bitflip_iter)
 
 flag = 0;
 N = length(A);
@@ -15,11 +15,14 @@ normr = norm(r);
 normb = norm(b);
 relres = normr/normb;
 
+error_iter = 0;
+
 while (iter < maxit) && (relres > tol)
     %inject error in vector p
-    if (iter == bitflip_iter) && (inject_error == 1)
+    if ismember(iter, bitflip_iter) && (inject_error == 1)
         diff_v = max(p);
         p(bitflip_pos) = p(bitflip_pos) + diff_v;
+        error_iter = iter;
     end
     
     q = A*p;
@@ -31,7 +34,7 @@ while (iter < maxit) && (relres > tol)
 
     
     % look at properties of vector x
-    if (iter == bitflip_iter - 1) && (inject_error == 1) 
+    if ismember(iter, bitflip_iter-1) && (inject_error == 1) 
         first_abs_gradient = abs(x- x1);
 %         second_temp_gradient = abs(x(bitflip_pos)- 2*x1(bitflip_pos) + x2(bitflip_pos));
         first_rel_gradient = abs((x-x1)./ x1); 
