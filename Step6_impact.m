@@ -85,7 +85,7 @@ for m = 1:num_matrices
         noerror_converges = result(:, 7);
         converges = result(:, 8);
         converge_ratios = converges./noerror_converges;
-
+        colororder(['r'; 'g'; 'b'; 'y'; 'm']);
         % plot sorted
         hold on;
         plot(sort(converge_ratios), 'DisplayName', num2str(i));
