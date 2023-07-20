@@ -31,8 +31,94 @@ for m = 1:num_matrices
     new_error = ['./matrices/', matrixname, '_newerror.mat'];
     load(new_error, 'injections');
 
+    % for i = injections
+    %     bitflip_iter = i;
+    % %% load experimental data
+    %     result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+    %     result = dlmread(result_filename);
+    %     A_row_2norms = result(:, 6);
+    %     noerror_converges = result(:, 7);
+    %     converges = result(:, 8);
+    %     converge_ratios = converges./noerror_converges;
+    % 
+    %     %% slowdown figure
+    %     figure;
+    %     scatter(A_row_2norms, converge_ratios, mrk_size, mrk, 'filled', color);
+    %     set(gca,'xscale');
+    %     xlabel('Row 2-norm of matrix A');
+    %     ylabel('Slowdown (x times)');
+    %     title(matrixname, 'interpreter', 'none');
+    %     set(gca,'FontSize',15);
+    %     hold off;
+    %     figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_row2norm'];
+    %     print(figure_filename, '-dpng');
+    % 
+    %     %% load gradients
+    %     % rel_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_relative.mat'];
+    %     % abs_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_absolute.mat'];
+    % 
+    %     r = result(:, 11);
+    %     figure;
+    %     scatter(r, converge_ratios, mrk_size, mrk, 'filled', color);
+    %     set(gca,'xscale');
+    %     xlabel('relative gradient');
+    %     ylabel('Slowdown (x times)');
+    %     title(matrixname, 'interpreter', 'none');
+    %     set(gca,'FontSize',15);
+    %     hold off;
+    %     figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_gradient_relative'];
+    %     print(figure_filename, '-dpng');
+    % 
+    % 
+    %     g = result(:,10);
+    %     figure;
+    %     scatter(g, converge_ratios, mrk_size, mrk, 'filled', color);
+    %     set(gca,'xscale');
+    %     xlabel('absolute gradient');
+    %     ylabel('Slowdown (x times)');
+    %     title(matrixname, 'interpreter', 'none');
+    %     set(gca,'FontSize',15);
+    %     hold off;
+    %     figure_filename = ['./figures/', matrixname, '/',comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'gradient_absolute'];
+    %     print(figure_filename, '-dpng');
+    % 
+    %     figure;
+    %     x = result(:,13);
+    %     scatter(x, converge_ratios, mrk_size, mrk, 'filled', color);
+    %     set(gca, 'xscale');
+    %     xlabel('x-values');
+    %     ylabel('Slowdown');
+    %     title(matrixname, 'interpreter', 'none');
+    %     set(gca, 'FontSize', 15);
+    % 
+    % 
+    %     hold off;
+    % 
+    %     figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_x'];
+    %     print(figure_filename, '-dpng');
+    % 
+    %     figure;
+    %     sg = result(:,12);
+    %     scatter(sg, converge_ratios, mrk_size, mrk, 'filled', color);
+    %     set(gca, 'xscale');
+    %     xlabel('gradient (not absolute)');
+    %     ylabel('Slowdown');
+    %     title(matrixname, 'interpreter', 'none');
+    %     set(gca, 'FontSize', 15);
+    % 
+    % 
+    %     hold off;
+    % 
+    %     figure_filename = ['./figures/', matrixname, '/',comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_grad(no_abs)'];
+    %     print(figure_filename, '-dpng');
+    % 
+    %     hold off; 
+    % end 
+    % 
+    % close all;
+
     for i = injections
-        bitflip_iter = 1;
+        bitflip_iter = i;
     %% load experimental data
         result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);
@@ -40,83 +126,25 @@ for m = 1:num_matrices
         noerror_converges = result(:, 7);
         converges = result(:, 8);
         converge_ratios = converges./noerror_converges;
-       
-        %% slowdown figure
-        figure;
-        scatter(A_row_2norms, converge_ratios, mrk_size, mrk, 'filled', color);
+
+        c = {'r', 'g', 'b', 'y', 'm'};
+
+        colororder(['r'; 'g'; 'b'; 'y'; 'm']);
+
+        % figure;
+        hold on;
+        scatter(A_row_2norms, converge_ratios, mrk_size, mrk, 'filled', 'DisplayName', num2str(i));
         set(gca,'xscale');
         xlabel('Row 2-norm of matrix A');
         ylabel('Slowdown (x times)');
         title(matrixname, 'interpreter', 'none');
         set(gca,'FontSize',15);
-        hold off;
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_row2norm'];
+        legend();
+        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_row2norm'];
         print(figure_filename, '-dpng');
-    
-        %% load gradients
-        % rel_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_relative.mat'];
-        % abs_grad_filename = ['./matrices/', matrixname, '_iter=', num2str(bitflip_iter), '_gradient_absolute.mat'];
-    
-        r = result(:, 11);
-        figure;
-        scatter(r, converge_ratios, mrk_size, mrk, 'filled', color);
-        set(gca,'xscale');
-        xlabel('relative gradient');
-        ylabel('Slowdown (x times)');
-        title(matrixname, 'interpreter', 'none');
-        set(gca,'FontSize',15);
-        hold off;
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_gradient_relative'];
-        print(figure_filename, '-dpng');
-    
-    
-        g = result(:,10);
-        figure;
-        scatter(g, converge_ratios, mrk_size, mrk, 'filled', color);
-        set(gca,'xscale');
-        xlabel('absolute gradient');
-        ylabel('Slowdown (x times)');
-        title(matrixname, 'interpreter', 'none');
-        set(gca,'FontSize',15);
-        hold off;
-        figure_filename = ['./figures/', matrixname, '/',comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), 'gradient_absolute'];
-        print(figure_filename, '-dpng');
-    
-        figure;
-        x = result(:,13);
-        scatter(x, converge_ratios, mrk_size, mrk, 'filled', color);
-        set(gca, 'xscale');
-        xlabel('x-values');
-        ylabel('Slowdown');
-        title(matrixname, 'interpreter', 'none');
-        set(gca, 'FontSize', 15);
-       
-    
-        hold off;
-    
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_x'];
-        print(figure_filename, '-dpng');
-    
-        figure;
-        sg = result(:,12);
-        scatter(sg, converge_ratios, mrk_size, mrk, 'filled', color);
-        set(gca, 'xscale');
-        xlabel('gradient (not absolute)');
-        ylabel('Slowdown');
-        title(matrixname, 'interpreter', 'none');
-        set(gca, 'FontSize', 15);
-       
-    
-        hold off;
-    
-        figure_filename = ['./figures/', matrixname, '/',comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter), '_grad(no_abs)'];
-        print(figure_filename, '-dpng');
-
-        hold off; 
     end 
-    
-    close all;
-
+    hold off; 
+    close all; 
 end 
     
 end

@@ -116,6 +116,9 @@ for m = 1:num_matrices
         converges = result(:, 8);
         converge_ratios = converges./noerror_converges;
 
+
+        colororder(['r'; 'g'; 'b'; 'y'; 'm']);
+        
         % plot unsorted
         hold on;
         plot(converge_ratios, 'DisplayName', num2str(i));
