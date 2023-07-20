@@ -34,7 +34,7 @@ for m = 1:num_matrices
 
 
     for i = injections
-        bitflip_iter = 1;
+        bitflip_iter = i;
         result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);
         noerror_converges = result(:, 7);
@@ -118,7 +118,7 @@ for m = 1:num_matrices
 
 
         colororder(['r'; 'g'; 'b'; 'y'; 'm']);
-        
+
         % plot unsorted
         hold on;
         plot(converge_ratios, 'DisplayName', num2str(i));
