@@ -5,7 +5,7 @@ function Step6_correlate
 close all;
 comments = 'correlate_slowdown';
 mrk = 'o';
-mrk_size = 15;
+mrk_size = 30;
 color = 'b';
 
 %matrices = {'cvxbqp1', 'thermal1', 'nd6k', ...
@@ -117,7 +117,14 @@ for m = 1:num_matrices
     % 
     % close all;
 
+    figure;
+    hold on;
+    disp_names = {'$2$', '$0.25I_o$', '$0.5I_o$', '$0.75I_o$', '$I_o$'}; 
+    colors = {'r'; '#77AC30'; 'b'; '#EDB120'; 'm'};
+    markers = ['o'; 'x'; 's'; '+'; 'd']; 
+    index = 0;
     for i = injections
+        index=index+1;
         bitflip_iter = i;
     %% load experimental data
         result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
@@ -127,24 +134,21 @@ for m = 1:num_matrices
         converges = result(:, 8);
         converge_ratios = converges./noerror_converges;
 
-        c = {'r', 'g', 'b', 'y', 'm'};
+        %colororder(['r'; 'g'; 'b'; 'k'; 'm']);
 
-        colororder(['r'; 'g'; 'b'; 'y'; 'm']);
-
-        % figure;
-        hold on;
-        scatter(A_row_2norms, converge_ratios, mrk_size, mrk, 'filled', 'DisplayName', num2str(i));
-        set(gca,'xscale');
+        scatter(A_row_2norms, converge_ratios, mrk_size, markers(index), MarkerFaceColor=char(colors(index)), MarkerEdgeColor=char(colors(index)));
+        %set(gca,'xscale','log');
+        set(gca,'yscale','log');
         xlabel('Row 2-norm of matrix A');
-        ylabel('Slowdown (x times)');
-        title(matrixname, 'interpreter', 'none');
-        set(gca,'FontSize',15);
-        legend();
+        ylabel('Slowdown');
+        %title(matrixname, 'interpreter', 'latex');
+        set(gca,'FontSize',14);
+        legend(disp_names, Location="northwest", Interpreter="latex");
         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_row2norm'];
         print(figure_filename, '-dpng');
     end 
     hold off; 
-    close all; 
+    %close all; 
 end 
     
 end

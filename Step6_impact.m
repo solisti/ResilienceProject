@@ -41,43 +41,47 @@ for m = 1:num_matrices
         converges = result(:, 8);
         converge_ratios = converges./noerror_converges;
 
-        %% plot unsorted figure
-        figure;
-        plot(converge_ratios, 'DisplayName',num2str(i));
-        title(matrixname, 'interpreter', 'none');
-        %set(gca,'xscale','log');
-        xlabel('Sample runs');
-        ylabel('Slowdown (x times)');
-        legend();
-        set(gca,'FontSize',15);
-        hold off;
-        comments = 'impact_unsorted';
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
-        print(figure_filename, '-dpng');
-        close all;
+%         %% plot unsorted figure
+%         figure;
+%         plot(converge_ratios, 'DisplayName',num2str(i));
+%         title(matrixname, 'interpreter', 'none');
+%         %set(gca,'xscale','log');
+%         xlabel('Sample runs');
+%         ylabel('Slowdown (x times)');
+%         legend();
+%         set(gca,'FontSize',15);
+%         hold off;
+%         comments = 'impact_unsorted';
+%         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+%         print(figure_filename, '-dpng');
+%         close all;
 
 
-        %% plot sorted figure
-        figure;
-        % hold on;
-        plot(sort(converge_ratios), 'DisplayName', num2str(i));
-        title(matrixname, 'interpreter', 'none');
-        %set(gca,'xscale','log');
-        xlabel('Sample runs');
-        ylabel('Slowdown (x times)');
-        legend();
-        set(gca,'FontSize',15);
-        hold off;
-        comments = 'impact_sorted';
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
-        print(figure_filename, '-dpng');
+%         %% plot sorted figure
+%         figure;
+%         % hold on;
+%         plot(sort(converge_ratios), 'DisplayName', num2str(i));
+%         title(matrixname, 'interpreter', 'none');
+%         %set(gca,'xscale','log');
+%         xlabel('Sample runs');
+%         ylabel('Slowdown (x times)');
+%         legend();
+%         set(gca,'FontSize',15);
+%         hold off;
+%         comments = 'impact_sorted';
+%         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+%         print(figure_filename, '-dpng');
     end 
     
 
     %% plot all iterations
 
     figure;
+    disp_names = {'$2$', '$0.25I_o$', '$0.5I_o$', '$0.75I_o$', '$I_o$'}; 
+    colors = {'r'; '#77AC30'; 'b'; '#EDB120'; 'm'};
+    index = 0;
     for i = injections
+        index=index+1;
         bitflip_iter = i;
         result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         %% load experimental data
@@ -85,16 +89,16 @@ for m = 1:num_matrices
         noerror_converges = result(:, 7);
         converges = result(:, 8);
         converge_ratios = converges./noerror_converges;
-        colororder(['r'; 'g'; 'b'; 'y'; 'm']);
+        %colororder(['r'; 'g'; 'b'; 'k'; 'm']); 
         % plot sorted
         hold on;
-        plot(sort(converge_ratios), 'DisplayName', num2str(i));
-        title(matrixname, 'interpreter', 'none');
-        %set(gca,'xscale','log');
-        xlabel('Sample runs');
-        ylabel('Slowdown (x times)');
-        legend();
-        set(gca,'FontSize',15);
+        plot(sort(converge_ratios), 'DisplayName', char(disp_names(index)), 'LineWidth', 2, 'Color', char(colors(index)));
+        %title(matrixname, 'interpreter', 'none');
+        set(gca,'yscale','log');
+        xlabel('Runs');
+        ylabel('Slowdown');
+        legend(Location="northwest", Interpreter="latex");
+        set(gca,'FontSize',14);
         % hold off;
         comments = 'impact_sorted';
         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname];
@@ -104,39 +108,37 @@ for m = 1:num_matrices
 
     hold off; 
 
-    figure;
-    % plot unsorted
-    for i = injections
-        bitflip_iter = i;
-        result_filename = ['./data/' matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-        %% load experimental data
-        % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-        result = dlmread(result_filename);
-        noerror_converges = result(:, 7);
-        converges = result(:, 8);
-        converge_ratios = converges./noerror_converges;
-
-
-        colororder(['r'; 'g'; 'b'; 'y'; 'm']);
-
-        % plot unsorted
-        hold on;
-        plot(converge_ratios, 'DisplayName', num2str(i));
-        title(matrixname, 'interpreter', 'none');
-        %set(gca,'xscale','log');
-        xlabel('Sample runs');
-        ylabel('Slowdown (x times)');
-        legend();
-        set(gca,'FontSize',15);
-        % hold off;
-        comments = 'impact_unsorted';
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname];
-        print(figure_filename, '-dpng');
-
-    end
-    hold off;
-
-    close all;
-end
-
+%     figure;
+%     % plot unsorted
+%     for i = injections
+%         bitflip_iter = i;
+%         result_filename = ['./data/' matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+%         %% load experimental data
+%         % result_filename = ['./data/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+%         result = dlmread(result_filename);
+%         noerror_converges = result(:, 7);
+%         converges = result(:, 8);
+%         converge_ratios = converges./noerror_converges;
+% 
+% 
+%         colororder(['r'; 'g'; 'b'; 'y'; 'm']);
+% 
+%         % plot unsorted
+%         hold on;
+%         plot(converge_ratios, 'DisplayName', num2str(i));
+%         title(matrixname, 'interpreter', 'none');
+%         %set(gca,'xscale','log');
+%         xlabel('Sample runs');
+%         ylabel('Slowdown (x times)');
+%         legend();
+%         set(gca,'FontSize',15);
+%         % hold off;
+%         comments = 'impact_unsorted';
+%         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname];
+%         print(figure_filename, '-dpng');
+% 
+%     end
+%     hold off;
+% 
+%     close all;
 end
