@@ -3,8 +3,7 @@ function Step6_impact
 % This function plots Figure 1 of the paper. 
 
 close all;
-% comments = 'impact';
-comments = 'histogram';
+comments = 'impact';
 color = 'b';
 
 %matrices = {'cvxbqp1', 'thermal1', 'nd6k', ...
@@ -12,7 +11,7 @@ color = 'b';
 %    'Trefethen_20000', 'vanbody','wathen100'};
 % matrices = {'bcsstk18'};
 % matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
-matrices = {'bcsstk18', 'bodyy5', 'cbuckle', 'G2_circuit'};
+matrices = {'cbuckle'};
 num_matrices = length(matrices);
 
 % bitflip_iter = 110;
@@ -34,80 +33,80 @@ for m = 1:num_matrices
     load(new_error, 'injections');
 
 
-    % for i = injections
-        bitflip_iter = 1;
+    for i = injections
+        bitflip_iter = i;
         result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
         result = dlmread(result_filename);
         noerror_converges = result(:, 7);
         converges = result(:, 8);
         converge_ratios = converges./noerror_converges;
 
-        %% plot unsorted figure
-        figure;
-        histogram(converge_ratios, 'NumBins', 20, 'DisplayName',num2str(bitflip_iter));
-        title(matrixname, 'interpreter', 'none');
-        %set(gca,'xscale','log');
-        xlabel('Slowdown');
-        ylabel('Number of Experiments');
-        % legend();
-        set(gca,'FontSize',15);
-        hold off;
-        comments = 'impact_unsorted';
-        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
-        print(figure_filename, '-dpng');
-        close all;
+%         %% plot unsorted figure
+%         figure;
+%         plot(converge_ratios, 'DisplayName',num2str(i));
+%         title(matrixname, 'interpreter', 'none');
+%         %set(gca,'xscale','log');
+%         xlabel('Sample runs');
+%         ylabel('Slowdown (x times)');
+%         legend();
+%         set(gca,'FontSize',15);
+%         hold off;
+%         comments = 'impact_unsorted';
+%         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+%         print(figure_filename, '-dpng');
+%         close all;
 
 
-        % %% plot sorted figure
-        % figure;
-        % % hold on;
-        % histograms(sort(converge_ratios), 'DisplayName', num2str(i));
-        % title(matrixname, 'interpreter', 'none');
-        % %set(gca,'xscale','log');
-        % xlabel('Sample runs');
-        % ylabel('Slowdown (x times)');
-        % legend();
-        % set(gca,'FontSize',15);
-        % hold off;
-        % comments = 'impact_sorted';
-        % figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
-        % print(figure_filename, '-dpng');
-    % end 
+%         %% plot sorted figure
+%         figure;
+%         % hold on;
+%         plot(sort(converge_ratios), 'DisplayName', num2str(i));
+%         title(matrixname, 'interpreter', 'none');
+%         %set(gca,'xscale','log');
+%         xlabel('Sample runs');
+%         ylabel('Slowdown (x times)');
+%         legend();
+%         set(gca,'FontSize',15);
+%         hold off;
+%         comments = 'impact_sorted';
+%         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
+%         print(figure_filename, '-dpng');
+    end 
     
 
     %% plot all iterations
 
-    % figure;
-    % disp_names = {'$2$', '$0.25I_o$', '$0.5I_o$', '$0.75I_o$', '$I_o$'}; 
-    % colors = {'r'; '#77AC30'; 'b'; '#EDB120'; 'm'};
-    % index = 0;
-    % for i = injections
-    %     index=index+1;
-    %     bitflip_iter = i;
-    %     result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
-    %     %% load experimental data
-    %     result = dlmread(result_filename);
-    %     noerror_converges = result(:, 7);
-    %     converges = result(:, 8);
-    %     converge_ratios = converges./noerror_converges;
-    %     %colororder(['r'; 'g'; 'b'; 'k'; 'm']); 
-    %     % plot sorted
-    %     hold on;
-    %     plot(sort(converge_ratios), 'DisplayName', char(disp_names(index)), 'LineWidth', 2, 'Color', char(colors(index)));
-    %     %title(matrixname, 'interpreter', 'none');
-    %     set(gca,'yscale','log');
-    %     xlabel('Runs');
-    %     ylabel('Slowdown');
-    %     legend(Location="northwest", Interpreter="latex");
-    %     set(gca,'FontSize',14);
-    %     % hold off;
-    %     comments = 'impact_sorted';
-    %     figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname];
-    %     print(figure_filename, '-dpng');
-    % 
-    % end
-    % 
-    % hold off; 
+    figure;
+    disp_names = {'$2$', '$0.25I_o$', '$0.5I_o$', '$0.75I_o$', '$I_o$'}; 
+    colors = {'r'; '#77AC30'; 'b'; '#EDB120'; 'm'};
+    index = 0;
+    for i = injections
+        index=index+1;
+        bitflip_iter = i;
+        result_filename = ['./data/', matrixname, '/Step3_', matrixname, '_iter=', num2str(bitflip_iter), '.dat'];
+        %% load experimental data
+        result = dlmread(result_filename);
+        noerror_converges = result(:, 7);
+        converges = result(:, 8);
+        converge_ratios = converges./noerror_converges;
+        %colororder(['r'; 'g'; 'b'; 'k'; 'm']); 
+        % plot sorted
+        hold on;
+        plot(sort(converge_ratios), 'DisplayName', char(disp_names(index)), 'LineWidth', 2, 'Color', char(colors(index)));
+        %title(matrixname, 'interpreter', 'none');
+        set(gca,'yscale','log');
+        xlabel('Runs');
+        ylabel('Slowdown');
+        legend(Location="northwest", Interpreter="latex");
+        set(gca,'FontSize',14);
+        % hold off;
+        comments = 'impact_sorted';
+        figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname];
+        print(figure_filename, '-dpng');
+
+    end
+
+    hold off; 
 
 %     figure;
 %     % plot unsorted
@@ -141,6 +140,5 @@ for m = 1:num_matrices
 %     end
 %     hold off;
 % 
-    close all;
-    end
+%     close all;
 end
