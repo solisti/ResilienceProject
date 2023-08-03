@@ -66,6 +66,13 @@ for m = 1:num_matrices
         std_overheads1_Arow2norm = std(overheads1_Arow2norm);
         sem_overheads1_Arow2norm = std_overheads1_Arow2norm/sqrt(num_exps);
         CI95_overheads1_Arow2norm = CI95*sem_overheads1_Arow2norm;
+
+        [min_val, min_idx] = min(slowdowns_Arow2norm);
+        min_slowdown = ['./data/', matrixname, '/', matrixname, '_min_slowdown.txt'];  % Replace with your desired filename and extension
+
+        fileID = fopen(min_slowdown, 'w');  % Open the file for writing
+        fprintf(fileID, min_val, min_idx);  % Write the minimum value to the file
+        fclose(fileID);  % Close the file
         
         %% load analysis data by random
         CI95 = tinv([0.975], num_exps-1);  % 95% confidence interval

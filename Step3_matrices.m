@@ -11,8 +11,7 @@ function Step3_matrices
 
 % matrices = {'vanbody', 'pwtk'};
 
-% matrices = {'cbuckle'}
-matrices = {'bcsstk18'};
+matrices = {'bodyy5', 'G2_circuit'};
 
 % matrices = {'m_t1', 'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', 'Trefethen_20000', 'vanbody','wathen100'};
 % matrices = {'msc23052', '2cubes_sphere', 'pwtk', 'G2_circuit', 'raefsky4', 'Trefethen_20000', 'vanbody','wathen100'};
@@ -30,7 +29,7 @@ end
 
 for m = 1:num_matrices
     matrixname = matrices{m};  
-    Step3_testing_set(matrixname, bitflip_iter);
+    Step3_solving_multi(matrixname, bitflip_iter);
 end 
 
 for m = 1:num_matrices
