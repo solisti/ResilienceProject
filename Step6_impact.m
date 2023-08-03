@@ -3,7 +3,8 @@ function Step6_impact
 % This function plots Figure 1 of the paper. 
 
 close all;
-comments = 'impact';
+% comments = 'impact';
+comments = 'histogram';
 color = 'b';
 
 %matrices = {'cvxbqp1', 'thermal1', 'nd6k', ...
