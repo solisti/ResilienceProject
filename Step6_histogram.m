@@ -11,7 +11,8 @@ color = 'b';
 %    'Trefethen_20000', 'vanbody','wathen100'};
 % matrices = {'bcsstk18'};
 % matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
-matrices = {'bcsstk18', 'bodyy5', 'cbuckle', 'G2_circuit'};
+%matrices = {'bcsstk18', 'bodyy5', 'cbuckle', 'G2_circuit'};
+matrices = {'bcsstk18', 'cbuckle'};
 num_matrices = length(matrices);
 
 % bitflip_iter = 110;
@@ -42,17 +43,17 @@ for m = 1:num_matrices
 
     %% plot histograms
     figure;
-    histogram(converge_ratios, 'NumBins', 20, 'DisplayName',num2str(bitflip_iter));
+    histogram(converge_ratios, 'NumBins', 50, 'Normalization','probability');
     title(matrixname, 'interpreter', 'none');
     %set(gca,'xscale','log');
     xlabel('Slowdown');
-    ylabel('Number of Experiments');
+    ylabel('Frequency (normalized)');
     % legend();
-    set(gca,'FontSize',15);
+    set(gca,'FontSize',18);
     hold off;
     figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_bitflip_iter=', num2str(bitflip_iter)];
     print(figure_filename, '-dpng');
-    close all;
+    %close all;
 
     end
 end

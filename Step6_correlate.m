@@ -14,6 +14,7 @@ color = 'b';
 % matrices = {'bcsstk18'};
 % matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
 matrices = {'cbuckle'};
+%matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
 % bitflip_iter = 1;
@@ -121,7 +122,7 @@ for m = 1:num_matrices
     hold on;
     disp_names = {'$2$', '$0.25I_o$', '$0.5I_o$', '$0.75I_o$', '$I_o$'}; 
     colors = {'r'; '#77AC30'; 'b'; '#EDB120'; 'm'};
-    markers = ['o'; 'x'; 's'; '+'; 'd']; 
+    markers = ['o'; '^'; 's'; '>'; 'd']; 
     index = 0;
     for i = injections
         index=index+1;
@@ -137,12 +138,14 @@ for m = 1:num_matrices
         %colororder(['r'; 'g'; 'b'; 'k'; 'm']);
 
         scatter(A_row_2norms, converge_ratios, mrk_size, markers(index), MarkerFaceColor=char(colors(index)), MarkerEdgeColor=char(colors(index)));
-        %set(gca,'xscale','log');
+        set(gca,'xscale','log');
         set(gca,'yscale','log');
+        set(gca, 'XTick', [1, 100, 10000]);
+        %set(gca, 'XTick', [1, 10^5, 10^10]);
         xlabel('Row 2-norm of matrix A');
         ylabel('Slowdown');
-        %title(matrixname, 'interpreter', 'latex');
-        set(gca,'FontSize',14);
+        title(matrixname, 'interpreter', 'none');
+        set(gca,'FontSize',18);
         legend(disp_names, Location="northwest", Interpreter="latex");
         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname, '_row2norm'];
         print(figure_filename, '-dpng');

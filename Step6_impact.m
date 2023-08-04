@@ -12,6 +12,7 @@ color = 'b';
 % matrices = {'bcsstk18'};
 % matrices = {'bcsstk18', 'thermal1', 'ct20stif', 'cbuckle'}; 
 matrices = {'cbuckle'};
+%matrices = {'bcsstk18'};
 num_matrices = length(matrices);
 
 % bitflip_iter = 110;
@@ -93,12 +94,12 @@ for m = 1:num_matrices
         % plot sorted
         hold on;
         plot(sort(converge_ratios), 'DisplayName', char(disp_names(index)), 'LineWidth', 2, 'Color', char(colors(index)));
-        %title(matrixname, 'interpreter', 'none');
+        title(matrixname, 'interpreter', 'none');
         set(gca,'yscale','log');
         xlabel('Runs');
         ylabel('Slowdown');
         legend(Location="northwest", Interpreter="latex");
-        set(gca,'FontSize',14);
+        set(gca,'FontSize',18);
         % hold off;
         comments = 'impact_sorted';
         figure_filename = ['./figures/', matrixname, '/', comments, '_', matrixname];
